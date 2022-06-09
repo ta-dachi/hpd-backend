@@ -6,8 +6,8 @@ export default {
   events: [
     {
       http: {
-        method: 'get',
-        path: 'get_contacts',
+        method: 'POST',
+        path: 'update_contact_info',
         request: {
           schemas: {
             'application/json': schema,

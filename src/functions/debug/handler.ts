@@ -4,12 +4,10 @@ import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
 
-import 'dotenv/config'
-
 const debug: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     return formatJSONResponse({
-      message: `${process.env.DB_HOST}  ${process.env.DB_USERNAME} ${process.env.DB_DATABASE}`,
+      message: `${process.env.DB_HOST ?? "t"}  ${process.env.DB_USERNAME ??"b"} ${process.env.DB_DATABASE ?? "t"}`,
     });
   } catch (error) {
     console.error(error)

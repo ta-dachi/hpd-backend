@@ -31,7 +31,8 @@ const update_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async 
     const rawData = await AppDataSource.query(sql, 
       [event.body.first_name ?? "", event.body.last_name ?? "", event.body.contact_role?? "", event.body.created_by ?? "", event.body.id]
     )
-
+    await AppDataSource.destroy()
+    
     return formatJSONResponse({
       message: JSON.stringify(rawData),
     });

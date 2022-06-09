@@ -9,9 +9,26 @@ import { AppDataSource } from 'src/data-source';
 
 const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
-    await AppDataSource.initialize()
-    const rawData = await AppDataSource.query("SELECT * FROM help_desk.contacts")
+    if (!event.body.id) {
+      return formatJSONResponse({
+        statusCode: 400,
+        message: `id required.`,
+        event,
+      });
+    }
 
+    const sql = `
+      DELETE FROM help_desk.contacts_info
+      WHERE contacts_id = $1
+      RETURNING *
+    `
+
+    await AppDataSource.initialize()
+    const rawData = await AppDataSource.query(sql, 
+      [event.body.contact_id]
+    )
+    await AppDataSource.destroy()
+    
     return formatJSONResponse({
       message: JSON.stringify(rawData),
     });
@@ -19,7 +36,7 @@ const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
     console.error(error)
     return formatJSONResponse({
       statusCode: 400,
-      message: `Could not get contacts.`,
+      message: `Could not remove contact.`,
       event,
     });
   }

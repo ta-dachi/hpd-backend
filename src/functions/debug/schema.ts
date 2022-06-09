@@ -1,7 +1,4 @@
 export default {
   type: "object",
-  properties: {
-    name: ""
-  },
-  required: []
+  properties: {},
 } as const;

@@ -7,28 +7,19 @@ import schema from './schema';
 import 'dotenv/config'
 import { AppDataSource } from 'src/data-source';
 
-const remove_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const update_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
-    if (!event.body.id) {
-      return formatJSONResponse({
-        statusCode: 400,
-        message: `id required.`,
-        event,
-      });
-    }
-
     const sql = `
-      DELETE FROM help_desk.contacts
-      WHERE id = $1
-      RETURNING *
+    INSERT into help_desk.contact_info (contact_number, contact_number_type, created_by, updated_by, id)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
     `
 
     await AppDataSource.initialize()
     const rawData = await AppDataSource.query(sql, 
-      [event.body.id]
+      [event.body.contact_number ?? "", event.body.contact_number_type ?? "", event.body.created_by ?? "", event.body.updated_by ?? "", event.body.id]
     )
-    await AppDataSource.destroy()
-    
+
     return formatJSONResponse({
       message: JSON.stringify(rawData),
     });
@@ -36,11 +27,11 @@ const remove_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async 
     console.error(error)
     return formatJSONResponse({
       statusCode: 400,
-      message: `Could not remove contact.`,
+      message: `Could not get contacts.`,
       event,
     });
   }
 
 };
 
-export const main = middyfy(remove_contact);
+export const main = middyfy(update_contact_info);

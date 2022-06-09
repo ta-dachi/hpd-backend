@@ -7,11 +7,15 @@ import get_contacts from '@functions/get_contacts';
 import update_contact from '@functions/update_contact';
 import remove_contact from '@functions/remove_contact';
 import debug from '@functions/debug';
+import update_contact_info from '@functions/update_contact_info';
+import remove_contact_info from '@functions/remove_contact_info';
+import add_contact_info from '@functions/add_contact_info';
 
-const serverlessConfiguration: AWS = {
+const serverlessConfiguration: AWS = {	
+  useDotenv: true,
   service: 'backend',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild', 'serverless-offline'],
+  plugins: ['serverless-esbuild', 'serverless-offline', 'serverless-dotenv-plugin'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -22,6 +26,11 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      DB_HOST: process.env.DB_HOST,
+      DB_PORT: process.env.DB_PORT,
+      DB_USERNAME: process.env.DB_USERNAME,
+      DB_PASSWORD: process.env.DB_PASSWORD,
+      DB_DATABASE: process.env.DB_DATABASE
     },
     iamRoleStatements: [
       {
@@ -64,8 +73,9 @@ const serverlessConfiguration: AWS = {
   //   }
   // },
   // import the function via paths
-  functions: { hello, debug,
-    add_contact, get_contacts, update_contact, remove_contact},
+  functions: { hello,
+    add_contact, get_contacts, update_contact, remove_contact,
+    add_contact_info, update_contact_info, remove_contact_info},
   package: { individually: true },
   custom: {
     esbuild: {
