@@ -6,7 +6,7 @@ export default {
   events: [
     {
       http: {
-        method: 'put',
+        method: 'PUT',
         path: 'remove_contact',
         request: {
           schemas: {

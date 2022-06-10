@@ -27,6 +27,7 @@ CREATE SEQUENCE contact_info_id_seq;
 
 CREATE TABLE help_desk.contact_info (
     id serial4 NOT NULL,
+    is_default boolean false,
     contact_number varchar NULL,
     contact_number_type varchar NULL,
     contact_id serial4 NOT NULL,
@@ -49,6 +50,8 @@ VALUES ('Takumio', 'Adachi1', 'Help Desk', 'takumiadachi@gmail.com')
 ON CONFLICT (last_name)
 DO NOTHING;
 
+SELECT id, first_name, last_name, contact_role, created_by, created_on, updated_on FROM help_desk.contacts;
+
 UPDATE help_desk.contacts
 SET first_name = 'Takumiooo',
 last_name = 'Adachiooo',
@@ -57,24 +60,34 @@ created_by = 'takumiadachi@gmail.com'
 WHERE id = 5
 RETURNING *
 
-      DELETE FROM help_desk.contacts
-      WHERE id = $1
-      RETURNING *
+  DELETE FROM help_desk.contacts
+  WHERE id = $1
+  RETURNING *;
 
 INSERT into help_desk.contact_info (id, contact_number, contact_number_type, created_by, updated_by)
 VALUES (1, '25081938243', 'Celld', 'takumiadachi@gmail.com', 'takumiadachi@gmail.com')
 RETURNING *;
 
+  DELETE FROM help_desk.contacts_info
+  WHERE contact_id = $1
+  RETURNING *;
+
 UPDATE help_desk.contact_info
 SET contact_number = '123456789',
+is_default = false,
 contact_number_type = 'home',
 created_by = 'takumiadachi@gmail.com',
 updated_by = 'takumiadachi@gmail.com'
-WHERE id = 1
+WHERE contact_id = 3
 RETURNING *;
+
+  DELETE FROM help_desk.contact_id
+  WHERE id = $1
+  RETURNING *;
 
 SELECT * 
 FROM help_desk.contacts c
 INNER JOIN help_desk.contact_info ci 
-ON c.id = ci.id;
+ON c.id = ci.id
+ORDER BY c.last_name
 

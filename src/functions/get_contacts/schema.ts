@@ -1,6 +1,4 @@
 export default {
   type: "object",
-  properties: {
-    name: { type: 'string' }
-  },
+  properties: {}
 } as const;

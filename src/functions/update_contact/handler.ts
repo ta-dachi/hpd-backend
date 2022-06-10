@@ -24,7 +24,7 @@ const update_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async 
       contact_role = $3,
       created_by = $4
       WHERE id = $5
-      RETURNING *
+      RETURNING *;
     `
 
     await AppDataSource.initialize()
@@ -32,7 +32,7 @@ const update_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async 
       [event.body.first_name ?? "", event.body.last_name ?? "", event.body.contact_role?? "", event.body.created_by ?? "", event.body.id]
     )
     await AppDataSource.destroy()
-    
+
     return formatJSONResponse({
       message: JSON.stringify(rawData),
     });

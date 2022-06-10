@@ -9,9 +9,19 @@ import { AppDataSource } from 'src/data-source';
 
 const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
+    // TODO Replace * with the fields you want
+    const sql = `
+    SELECT * 
+    FROM help_desk.contacts c
+    INNER JOIN help_desk.contact_info ci 
+    ON c.id = ci.id
+    ORDER BY c.last_name
+    `
+
     await AppDataSource.initialize()
-    const rawData = await AppDataSource.query("SELECT * FROM help_desk.contacts")
+    const rawData = await AppDataSource.query(sql)
     await AppDataSource.destroy()
+
     return formatJSONResponse({
       message: JSON.stringify(rawData),
     });

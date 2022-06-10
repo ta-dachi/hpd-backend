@@ -6,10 +6,10 @@ import add_contact from '@functions/add_contact';
 import get_contacts from '@functions/get_contacts';
 import update_contact from '@functions/update_contact';
 import remove_contact from '@functions/remove_contact';
-import debug from '@functions/debug';
 import update_contact_info from '@functions/update_contact_info';
 import remove_contact_info from '@functions/remove_contact_info';
 import add_contact_info from '@functions/add_contact_info';
+import debug from '@functions/debug';
 
 const serverlessConfiguration: AWS = {	
   useDotenv: true,
@@ -73,7 +73,7 @@ const serverlessConfiguration: AWS = {
   //   }
   // },
   // import the function via paths
-  functions: { hello,
+  functions: { hello, debug,
     add_contact, get_contacts, update_contact, remove_contact,
     add_contact_info, update_contact_info, remove_contact_info},
   package: { individually: true },
