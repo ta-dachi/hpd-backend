@@ -8,6 +8,7 @@ export default {
       http: {
         method: 'GET',
         path: 'debug',
+        cors: true
         // request: {
         //   schemas: {
         //     'application/json': schema,

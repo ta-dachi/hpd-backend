@@ -8,7 +8,7 @@ export default {
       http: {
         // TODO For some reason this only works if it's a POST
         method: 'POST',
-        path: 'get_contacts',
+        path: 'get_contact_info',
         cors: true,
         request: {
           schemas: {

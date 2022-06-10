@@ -62,16 +62,14 @@ WHERE id = 5
 RETURNING *
 
   DELETE FROM help_desk.contacts
-  WHERE id = $1
-  RETURNING *;
+  WHERE id = 11
 
-INSERT into help_desk.contact_info (id, contact_number, contact_number_type, created_by, updated_by)
-VALUES (1, '25081938243', 'Celld', 'takumiadachi@gmail.com', 'takumiadachi@gmail.com')
+INSERT into help_desk.contact_info (contact_number, contact_number_type, created_by, updated_by, id)
+VALUES ('25081938243', 'Celld', 'takumiadachi@gmail.com', 'takumiadachi@gmail.com', 33)
 RETURNING *;
 
-  DELETE FROM help_desk.contacts_info
-  WHERE contact_id = $1
-  RETURNING *;
+  DELETE FROM help_desk.contact_info
+  WHERE contact_id = 11
 
 UPDATE help_desk.contact_info
 SET contact_number = '123456789',

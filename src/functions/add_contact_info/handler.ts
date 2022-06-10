@@ -7,7 +7,7 @@ import schema from './schema';
 import 'dotenv/config'
 import { AppDataSource } from 'src/data-source';
 
-const update_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const add_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const sql = `
     INSERT into help_desk.contact_info (contact_number, contact_number_type, created_by, updated_by, id)
@@ -19,7 +19,8 @@ const update_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = a
     const rawData = await AppDataSource.query(sql, 
       [event.body.contact_number ?? "", event.body.contact_number_type ?? "", event.body.created_by ?? "", event.body.updated_by ?? "", event.body.id]
     )
-
+    await AppDataSource.destroy()
+    
     return formatJSONResponse({
       message: JSON.stringify(rawData),
     });
@@ -27,11 +28,11 @@ const update_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = a
     console.error(error)
     return formatJSONResponse({
       statusCode: 400,
-      message: `Could not get contacts.`,
+      message: `Could not add contact info`,
       event,
     });
   }
 
 };
 
-export const main = middyfy(update_contact_info);
+export const main = middyfy(add_contact_info);

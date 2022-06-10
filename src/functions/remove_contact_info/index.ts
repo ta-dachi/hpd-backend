@@ -6,8 +6,9 @@ export default {
   events: [
     {
       http: {
-        method: 'get',
-        path: 'get_contacts',
+        method: 'PUT',
+        path: 'remove_contact_info',
+        cors: true,
         request: {
           schemas: {
             'application/json': schema,

@@ -15,13 +15,13 @@ const update_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = a
     contact_number_type = $2,
     created_by = $3,
     updated_by = $4
-    WHERE id = $5
+    WHERE contact_id = $5
     RETURNING *;
     `
 
     await AppDataSource.initialize()
     const rawData = await AppDataSource.query(sql, 
-      [event.body.contact_number ?? "", event.body.contact_number_type ?? "", event.body.created_by ?? "", event.body.updated_by ?? "", event.body.id]
+      [event.body.contact_number ?? "", event.body.contact_number_type ?? "", event.body.created_by ?? "", event.body.updated_by ?? "", event.body.contact_id]
     )
     await AppDataSource.destroy()
     

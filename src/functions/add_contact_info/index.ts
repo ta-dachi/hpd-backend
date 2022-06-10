@@ -7,7 +7,8 @@ export default {
     {
       http: {
         method: 'POST',
-        path: 'update_contact_info',
+        path: 'add_contact_info',
+        cors: true,
         request: {
           schemas: {
             'application/json': schema,

@@ -7,20 +7,19 @@ import schema from './schema';
 import 'dotenv/config'
 import { AppDataSource } from 'src/data-source';
 
-const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const remove_contact_info: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
-    if (!event.body.id) {
+    if (!event.body.contact_id) {
       return formatJSONResponse({
         statusCode: 400,
-        message: `id required.`,
+        message: `contact id required.`,
         event,
       });
     }
 
     const sql = `
-      DELETE FROM help_desk.contacts_info
-      WHERE contacts_id = $1
-      RETURNING *
+      DELETE FROM help_desk.contact_info
+      WHERE contact_id = $1
     `
 
     await AppDataSource.initialize()
@@ -43,4 +42,4 @@ const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
 
 };
 
-export const main = middyfy(get_contacts);
+export const main = middyfy(remove_contact_info);
