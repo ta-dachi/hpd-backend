@@ -6,8 +6,9 @@ export default {
   events: [
     {
       http: {
-        method: 'post',
-        path: 'add_contact',
+        // TODO For some reason this only works if it's a POST
+        method: 'POST',
+        path: 'get_contacts',
         cors: true,
         request: {
           schemas: {

@@ -10,6 +10,8 @@ import update_contact_info from '@functions/update_contact_info';
 import remove_contact_info from '@functions/remove_contact_info';
 import add_contact_info from '@functions/add_contact_info';
 import debug from '@functions/debug';
+import get_contact_by_id from '@functions/get_contact_by_id';
+import get_contact_info from '@functions/get_contact_info';
 
 const serverlessConfiguration: AWS = {	
   useDotenv: true,
@@ -74,8 +76,8 @@ const serverlessConfiguration: AWS = {
   // },
   // import the function via paths
   functions: { hello, debug,
-    add_contact, get_contacts, update_contact, remove_contact,
-    add_contact_info, update_contact_info, remove_contact_info},
+    add_contact, get_contacts, update_contact, remove_contact, get_contact_by_id,
+    add_contact_info, update_contact_info, remove_contact_info, get_contact_info},
   package: { individually: true },
   custom: {
     esbuild: {

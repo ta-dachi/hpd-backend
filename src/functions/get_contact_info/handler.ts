@@ -12,11 +12,12 @@ const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
     // TODO Replace * with the fields you want
     const sql = `
     SELECT * 
-    FROM help_desk.contacts c
+    FROM help_desk.contact_info
+    WHERE id = $1
     `
 
     await AppDataSource.initialize()
-    const rawData = await AppDataSource.query(sql)
+    const rawData = await AppDataSource.query(sql, [event.body.id])
     await AppDataSource.destroy()
 
     return formatJSONResponse({

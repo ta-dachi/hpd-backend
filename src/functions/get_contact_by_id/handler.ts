@@ -7,16 +7,17 @@ import schema from './schema';
 import 'dotenv/config'
 import { AppDataSource } from 'src/data-source';
 
-const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const get_contact_by_id: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     // TODO Replace * with the fields you want
     const sql = `
     SELECT * 
-    FROM help_desk.contacts c
+    FROM help_desk.contacts
+    WHERE id = $1;
     `
 
     await AppDataSource.initialize()
-    const rawData = await AppDataSource.query(sql)
+    const rawData = await AppDataSource.query(sql, [event.body.id])
     await AppDataSource.destroy()
 
     return formatJSONResponse({
@@ -33,4 +34,4 @@ const get_contacts: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
 
 };
 
-export const main = middyfy(get_contacts);
+export const main = middyfy(get_contact_by_id);

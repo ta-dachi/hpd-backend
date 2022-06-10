@@ -8,6 +8,7 @@ export default {
       http: {
         method: 'PUT',
         path: 'update_contact',
+        cors: true,
         request: {
           schemas: {
             'application/json': schema,

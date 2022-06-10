@@ -14,6 +14,9 @@ CREATE TABLE help_desk.contacts (
     created_by varchar NULL,
     created_on timestamp NULL DEFAULT now(),
     updated_on timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    email varchar NULL,
+    contact_number_default varchar NULL,
+    contact_number_type_default varchar NULL,
     CONSTRAINT employee_pk PRIMARY KEY (id)
 );
 
@@ -27,7 +30,6 @@ CREATE SEQUENCE contact_info_id_seq;
 
 CREATE TABLE help_desk.contact_info (
     id serial4 NOT NULL,
-    is_default boolean false,
     contact_number varchar NULL,
     contact_number_type varchar NULL,
     contact_id serial4 NOT NULL,
@@ -40,15 +42,14 @@ CREATE TABLE help_desk.contact_info (
 
 ALTER TABLE help_desk.contact_info ADD CONSTRAINT contact_info_fk FOREIGN KEY (id) REFERENCES help_desk.contacts(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-INSERT into help_desk.contacts (first_name, last_name, contact_role, created_by) 
-VALUES ('Takumio', 'Adachi1', 'Help Desk', 'takumiadachi@gmail.com')
+INSERT into help_desk.contacts (first_name, last_name, contact_role, created_by, email) 
+VALUES ('Takumio', 'Adachi1', 'Help Desk', 'takumiadachi@gmail.com', 'takumiadachiii@gmail.com')
 ON CONFLICT (last_name)
 DO NOTHING;
 
-INSERT into help_desk.contacts (first_name, last_name, contact_role, created_by) 
-VALUES ('Takumio', 'Adachi1', 'Help Desk', 'takumiadachi@gmail.com')
-ON CONFLICT (last_name)
-DO NOTHING;
+INSERT into help_desk.contacts (first_name, last_name, contact_role, created_by, email) 
+VALUES ('Takumiodsa', 'Adachi1', 'Help Desk', 'takumiadachi@gmail.com', 'test@email')
+RETURNING id
 
 SELECT id, first_name, last_name, contact_role, created_by, created_on, updated_on FROM help_desk.contacts;
 
@@ -91,3 +92,9 @@ INNER JOIN help_desk.contact_info ci
 ON c.id = ci.id
 ORDER BY c.last_name
 
+SELECT * 
+FROM help_desk.contacts c
+
+SELECT * 
+FROM help_desk.contacts c
+WHERE id = 22

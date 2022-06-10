@@ -22,14 +22,22 @@ const update_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async 
       SET first_name = $1,
       last_name = $2,
       contact_role = $3,
-      created_by = $4
-      WHERE id = $5
+      created_by = $4,
+      email = $5,
+      contact_number_default = $6,
+      contact_number_type_default = $7
+      WHERE id = $8
       RETURNING *;
     `
 
     await AppDataSource.initialize()
+    // Parameterized SQL to prevent SQL injection
+    // See https://stackoverflow.com/questions/54684928/how-to-use-parameterized-query-using-typeorm-for-postgres-database-and-nodejs-as
+    // And https://www.ge.com/digital/documentation/historian/version72/c_parameterized_sql_queries.html#:~:text=Parameterized%20SQL%20queries%20allow%20you,values%20and%20for%20different%20purposes.
+    // https://stackoverflow.com/questions/4712037/what-is-parameterized-query
     const rawData = await AppDataSource.query(sql, 
-      [event.body.first_name ?? "", event.body.last_name ?? "", event.body.contact_role?? "", event.body.created_by ?? "", event.body.id]
+      [event.body.first_name ?? "", event.body.last_name ?? "", event.body.contact_role ?? "", event.body.created_by ?? "", 
+      event.body.email ?? "", event.body.contact_number_default ?? "", event.body.contact_number_type_default ?? "", event.body.id]
     )
     await AppDataSource.destroy()
 

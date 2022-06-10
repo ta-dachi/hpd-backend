@@ -10,20 +10,17 @@ import { AppDataSource } from 'src/data-source';
 const add_contact: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   try {
     const sql = `
-    INSERT INTO help_desk.contacts (first_name, last_name, contact_role, created_by)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO help_desk.contacts (first_name, last_name, contact_role, created_by, email, contact_number_default, contact_number_type_default)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING id;
     `
-    // ON CONFLICT (first_name, last_name)
-    // DO NOTHING
 
-    console.log(sql)
     await AppDataSource.initialize()
-    const rawData = await AppDataSource.query(sql, [event.body.first_name ?? "", event.body.last_name ?? "", event.body.contact_role?? "", event.body.created_by ?? ""])
-    console.log(rawData)
+    const rawData = await AppDataSource.query(sql, [event.body.first_name ?? "", event.body.last_name ?? "", event.body.contact_role?? "", event.body.created_by ?? "", event.body.email ?? "", event.body.contact_number_default ?? "", event.body.contact_number_type_default ?? "" ])
     await AppDataSource.destroy()
     
     return formatJSONResponse({
-      message: JSON.stringify(event.body),
+      message: JSON.stringify(rawData),
     });
   } catch (error) {
     console.error(error)
